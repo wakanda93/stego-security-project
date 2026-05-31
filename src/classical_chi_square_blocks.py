@@ -59,11 +59,25 @@ def load_dataset():
     clean_dir = Path("data/processed/clean")
     stego_dir = Path("data/processed/stego")
 
-    clean_images = list(clean_dir.glob("*.png"))
-    stego_images = list(stego_dir.glob("*.png"))
+    supported_extensions = {".png", ".jpg", ".jpeg", ".bmp"}
+
+    clean_images = [
+        path for path in clean_dir.iterdir()
+        if path.is_file() and path.suffix.lower() in supported_extensions
+    ]
+
+    stego_images = [
+        path for path in stego_dir.iterdir()
+        if path.is_file() and path.suffix.lower() in supported_extensions
+    ]
 
     image_paths = clean_images + stego_images
     labels = [0] * len(clean_images) + [1] * len(stego_images)
+
+    if len(image_paths) == 0:
+        raise ValueError(
+            "No processed images found. Supported extensions are: .png, .jpg, .jpeg, .bmp"
+        )
 
     return image_paths, labels
 
