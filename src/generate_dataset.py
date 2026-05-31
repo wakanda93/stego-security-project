@@ -4,6 +4,7 @@ import os
 import random
 from pathlib import Path
 from tqdm import tqdm
+import argparse
 
 
 def text_to_bits(text):
@@ -17,13 +18,15 @@ def embed_text_lsb(image_path, output_path, text, payload_rate=0.1):
     img_array = np.array(image)
     flat_pixels = img_array.reshape(-1, 3)
 
-    text = text + "###END###"
-    bits = text_to_bits(text)
-
     max_bits = int(len(flat_pixels) * 3 * payload_rate)
 
-    if len(bits) > max_bits:
-        bits = bits[:max_bits]
+    payload_text = text + "###END###"
+    bits = text_to_bits(payload_text)
+
+    while len(bits) < max_bits:
+        bits += text_to_bits(text)
+    
+    bits = bits[:max_bits]
 
     bit_index = 0
 
@@ -56,7 +59,7 @@ def load_payloads(payload_file):
     return payloads
 
 
-def generate_dataset():
+def generate_dataset(payload_rate):
     raw_clean_dir = Path("data/raw_clean")
     clean_output_dir = Path("data/processed/clean")
     stego_output_dir = Path("data/processed/stego")
@@ -87,7 +90,7 @@ def generate_dataset():
             image_path=image_path,
             output_path=stego_output_path,
             text=selected_payload,
-            payload_rate=0.1
+            payload_rate=payload_rate
         )
 
     print("Dataset generation completed.")
@@ -96,4 +99,15 @@ def generate_dataset():
 
 
 if __name__ == "__main__":
-    generate_dataset()
+    parser = argparse.ArgumentParser(description="Generate clean and stego image datasets.")
+
+    parser.add_argument(
+        "--payload-rate",
+        type=float,
+        default=0.1,
+        help="Fraction of available LSB capacity used for embedding. Example: 0.01 means 1 percent."
+    )
+
+    args = parser.parse_args()
+
+    generate_dataset(payload_rate=args.payload_rate)
