@@ -1,13 +1,5 @@
 # CNN-Based Autonomous Steganalysis and Malicious Payload Detection
 
-<p align="center">
-  <img src="system_architecture.png" width="900">
-</p>
-
-<p align="center">
-CNN-Based Steganalysis • Payload Extraction • Payload Classification • Autonomous Security Agent
-</p>
-
 ## Overview
 
 This project was developed for the CENG 3544 - Computer and Network Security course at Muğla Sıtkı Koçman University.
@@ -33,6 +25,12 @@ This project investigates whether Convolutional Neural Networks (CNNs) can effec
 ---
 
 ## System Architecture
+
+<p align="center">
+
+  <img src="system_architecture.png" width="650">
+
+</p>
 
 The proposed framework consists of two major phases:
 
