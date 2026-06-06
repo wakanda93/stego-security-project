@@ -28,7 +28,7 @@ This project investigates whether Convolutional Neural Networks (CNNs) can effec
 
 <p align="center">
 
-  <img src="system_architecture.png" width="650">
+  <img src="system_architecture.png" width="300">
 
 </p>
 
